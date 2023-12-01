@@ -40,31 +40,31 @@ jobs:
     steps:
       - name: Set target IP
         run: 
-        # CURRENT_UPSTREAM이라는 변수에 응답을 저장
-        CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.NGINX_IP }}/env")
-        echo $CURRENT_UPSTREAM
-        # -ne 는 not equal을 의미한다. -o는 or를 의미한다.
-        # 블루도 그린도 아니면 블루로
-        if [ $CURRENT_UPSTREAM -ne blue -o $CURRENT_UPSTREAM -ne green ]; then
-          #CURRENT_UPSTREAM=blue
-        # if를 닫는다
-        fi
-        if [ $CURRENT_UPSTEAM -eq blue ]; then
-          # run이 끝나면 셸이 종료된다. 따라서 밑에서도 계속 쓰려면 >> $GITHUB_ENV 해서 저장해둬야 함. 밑에서 CURRENT_IP는 계속 쓸 수 있게 되었다.
-          echo "CURRENT_IP=${{ secrets.BLUE_IP }}" >> $GITHUB_ENV
-          echo "STOPPED_ID=${{ secrets.GREEN_IP }}" >> $GITHUB_ENV
-          echo "TARGET_UPSTREAM=green" >> $GITHUB_ENV
-        fi
-        elif [ $CURRENT_UPSTEAM -eq green ]; then
-          echo "CURRENT_IP=${{ secrets.GREEN_IP }}" >> $GITHUB_ENV
-          echo "STOPPED_ID=${{ secrets.BLUE_IP }}" >> $GITHUB_ENV
-          echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
-        fi
-        else
-          # 에러 발생 시 멈춘다
-          echo "erorr"
-          exit 1
-        fi
+          # CURRENT_UPSTREAM이라는 변수에 응답을 저장
+          CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.NGINX_IP }}/env")
+          echo $CURRENT_UPSTREAM
+          # -ne 는 not equal을 의미한다. -o는 or를 의미한다.
+          # 블루도 그린도 아니면 블루로
+          if [ $CURRENT_UPSTREAM -ne blue -o $CURRENT_UPSTREAM -ne green ]; then
+            #CURRENT_UPSTREAM=blue
+          # if를 닫는다
+          fi
+          if [ $CURRENT_UPSTEAM -eq blue ]; then
+            # run이 끝나면 셸이 종료된다. 따라서 밑에서도 계속 쓰려면 >> $GITHUB_ENV 해서 저장해둬야 함. 밑에서 CURRENT_IP는 계속 쓸 수 있게 되었다.
+            echo "CURRENT_IP=${{ secrets.BLUE_IP }}" >> $GITHUB_ENV
+            echo "STOPPED_ID=${{ secrets.GREEN_IP }}" >> $GITHUB_ENV
+            echo "TARGET_UPSTREAM=green" >> $GITHUB_ENV
+          fi
+          elif [ $CURRENT_UPSTEAM -eq green ]; then
+            echo "CURRENT_IP=${{ secrets.GREEN_IP }}" >> $GITHUB_ENV
+            echo "STOPPED_ID=${{ secrets.BLUE_IP }}" >> $GITHUB_ENV
+            echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
+          fi
+          else
+            # 에러 발생 시 멈춘다
+            echo "erorr"
+            exit 1
+          fi
       - name: Docker compose
         # github action에서 ssh접속 및 셸 스크립트 사용 가능
         uses: appleboy@ssh-action@master
